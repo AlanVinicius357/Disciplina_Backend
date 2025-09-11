@@ -1,5 +1,5 @@
 {
-  "name": "04-calculadora",
+  "name": "05-crud-express",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
