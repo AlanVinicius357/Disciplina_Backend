@@ -3,6 +3,13 @@ const express = require('express')
 // crio uma instância do express
 const app = express()
 
+// importar o lib cors
+const cors = require('cors')
+// Desabilita a configuração de cors
+// Habilida o browser para mandar requisição pro seu bakcend local
+app.use(cors())
+
+
 // Middlewares (Intermediários)
 // Intermediário de log
 app.use((req, res, next) => {
@@ -22,7 +29,11 @@ app.get('/nome', (req, res, next) => {
   res.send("Olá " + primeiroNome + " " + sobreNome + "!!!") 
 })
 // Importando o router calculadora de nota
+
 const calculadoraNotaRouter = require('./routes/calculadoraNota')
+
+const calculadoraNotaRouter = require('./routes/calculadoraNota')
+
 // Toda requisição que chegar na rota /calculadora vai para o router
 app.use('/calculadora', calculadoraNotaRouter)
 
