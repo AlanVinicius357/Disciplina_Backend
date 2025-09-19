@@ -1,107 +1,106 @@
-//importar o express
 const express = require('express')
-//criar um roteador
 const router = express.Router()
 
-//lista de pessoas pra simular o bando de dados
+// lista de pessoas pra simular o banco dados
 let listaPessoas = [
-    {
-        id: 1,
-        nome: 'Alan',
-        cpf: "15554887684",
-        email:"alan@gmail.com",
-        dataNascimento: "27/02/2001"
-    },
-    {
-        id: 2,
-        nome: 'Raiane',
-        cpf: "58765428217",
-        email:"raiane@gmail.com",
-        dataNascimento: "10/11/2004"
-    }
+  {
+    id: 1,
+    nome: "João",
+    cpf: "00100100101",
+    email: "joão@pedro.com",
+    dataNascimento: "01/01/2000"
+  },
+  {
+    id: 2,
+    nome: "Maria",
+    cpf: "00200200202",
+    email: "maria@joana.com",
+    dataNascimento: "01/01/1990"
+  },
 ]
 
-//mapear as rotas e a logica
-//Buscar
-//get/pessoas
-router.get('/pessoas', (req, res, next) =>{
-    res.json(listaPessoas)
+// mapear as rotas e a lógica
+// #Busca
+// GET /pessoas
+router.get('/pessoas', (req, res, next) => {
+  res.json(listaPessoas)
 })
 
-
-//busca pelo id
-//get pessoas/id:
+// #Busca por id
+// GET /pessoas/:id
 router.get('/pessoas/:id', (req, res, next) => {
-    //recebenod o id como parametro dinamico
-    const id = req.params.id
-    //faço a busca na lista de pessoas pelo id recebido
-    const pessoa = listaPessoas.find(pessoa => pessoa.id == id)
-
-    if (!pessoa) {
-        return res.status(404).json({error: "Pessoa não encontrada!!"})
-    }
-    res.json(pessoa)
+  // recebendo o ID como parametro dinâmico
+  const id = req.params.id
+  // faço a busca na lista de pessoas pelo id recebido
+  const pessoa = listaPessoas.find(pessoa => pessoa.id == id)
+  if (!pessoa) {
+    return res.status(404).json({ error: "Pessoa não encontrada!!!" })
+  }
+  res.json(pessoa)
 })
 
-//criação
-//post/pessoas
-//req.body
-//new date()
-router.post('/pessoas', (req, res, next)=>{
-    const { nome, email, dataNascimento} = req.body
-//validando todos os itens
-    if (!nome || !cpf || !email || !dataNascimento){
-        return res.status(400).json ({error: "Nome, cpf, email e data de nascimento são obrigatórios!!"})
-    }
-//validar se o cpf ja está cadastrado
+// #Criação
+// POST /pessoas
+router.post('/pessoas', (req, res, next) => {
+  const { nome, cpf, email, dataNascimento } = req.body
+  // Validando se todos os campos foram preenchidos
+  if (!nome || !cpf || !email || !dataNascimento) {
+    return res.status(400).json({ error: "Nome, cpf, email e DataNascimento são obrigatórios!!!" })
+  }
 
-    if (listaPessoas.some(pessoa => pessoa.cpf == cpf)){
-        return res.status(409).json({error: "Cpf já cadastrado"})
-    }
+  // validar se o cpf já foi cadastrado
+  if (listaPessoas.some(pessoa => pessoa.cpf == cpf)) {
+    return res.status(409).json({ error: "CPF já cadastrado!!!" })
+  }
 
-const novaPessoa = {
+  const novaPessoa = {
     id: Date.now(),
     nome,
-    cpf, 
+    cpf,
     email,
     dataNascimento
-}
-listaPessoas.push(novaPessoa)
-res.status(201).json({message: "Pessoa cadastrada com sucesso", novaPessoa})
+  }
+
+  listaPessoas.push(novaPessoa)
+  res.status(201).json({ message: "Pessoa cadastrada com sucesso", novaPessoa })
 })
 
-//atualizar
-//put ou patch
+// #Atualização
+// PUT /pessoas/:id
 router.put('/pessoas/:id', (req, res, next) => {
-    const id = req.params.id
-    const pessoa = listaPessoas.find(pessoa => pessoa.id == id)
-    //validar se pessoa existe
-    if(!pessoa){
-        return res.status(404).json({error: "Pessoa não encontrada!!!"})
-    }
-
-
-//validar se os dados pra atualizar vinheram na requisição
-    const {nome, email, dataNascimento} = req.body
-    if(!nome || !email || !dataNascimento){
-        return res.status(400).json({error: "Nome, email e data de nascimento são obrigatórios!"})
-    }
-
-//atualizo dados da pessoa
-pessoa.nome = nome 
-pessoa.email = email
-pessoa.dataNascimento = dataNascimento
-
-res.json({message: "Pessoa atualizada com sucesso!", pessoa})
+  const id = req.params.id
+  const pessoa = listaPessoas.find(pessoa => pessoa.id == id)
+  // valido se a pessoa existe
+  if (!pessoa) {
+    return res.status(404).json({ error: "Pessoa não encontrada!!!" })
+  }
+  // validando se os dados pra atualizar vinheram na requisição
+  const { nome, email, dataNascimento } = req.body
+  if (!nome || !email || !dataNascimento) {
+    return res.status(400).json({ error: "nome, email, dataNascimento são obrigatórios!!!" })
+  }
+  // atualizo os dados da pessoa
+  pessoa.nome = nome
+  pessoa.email = email
+  pessoa.dataNascimento = dataNascimento
+  // responde com os dados da pessoa atualizados 
+  res.json({ message: "Pessoa atualizada com sucesso!!!", pessoa })
 })
 
-//deletar pessoa
-router.delete('/pessoas/:id', (req, res, next) =>{
-    
+// #Remoção
+// DELETE /pessoas/:id
+router.delete('/pessoas/:id', (req, res, next) => {
+  const id = req.params.id
+  // validar se a pessoa não existe
+  const pessoa = listaPessoas.find(pessoa => pessoa.id == id)
+  if (!pessoa) {
+    return res.status(404).json({ error: "pessoa não encontrada!!!"})
+  }
+
+  listaPessoas = listaPessoas.filter(pessoa => pessoa.id != id)
+  res.json({ message: "Pessoa excluida com sucesso!!!"})
 })
 
 
-
-//exportar o roteador
+// exportar o roteador
 module.exports = router
-
