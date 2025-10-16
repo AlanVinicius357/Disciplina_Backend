@@ -1,0 +1,4 @@
+acesso 
+usuario: AlanVinicius27
+senha:*****
+endereço banco de dados: cluster0.5hpbakc.mongodb.net
