@@ -1,8 +1,9 @@
 const express = require('express')
 const app = express()
+
 app.use(express.json())
 
-//conectar com banco de dados
+// conexão com o banco de dados
 const mongoose = require('mongoose')
 const dotenv = require('dotenv').config()
 
@@ -13,22 +14,18 @@ const DB_NAME = process.env.DB_NAME
 
 const url = `mongodb+srv://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}?retryWrites=true&w=majority&appName=Cluster0`
 
-//conectar ao mongo junto do mongoose
-
 mongoose.connect(url)
-    .then(() => {
-        console.log("Conectado ao MongoDB")
-    })
-    .catch(err => {
-        console.log("Erro ao conectar no banco MongoDB: ", err)
-    })
+  .then(() => {
+    console.log("Conectado ao MongoDB")
+  })
+  .catch(err => {
+    console.log("Erro ao conectar no banco MongoDB: ", err)
+  })
 
 // controladores e rotas
 const PessoaController = require('./controllers/PessoaController')
 app.use(PessoaController)
 
-
-//rodar aplicação
 app.listen(3000, () => {
-    console.log("Aplicação rodando em http://localhost:3000")
+  console.log("Aplicação rodando em http://localhost:3000")
 })
