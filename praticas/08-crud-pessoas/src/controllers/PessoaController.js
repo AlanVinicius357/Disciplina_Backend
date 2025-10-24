@@ -2,9 +2,13 @@ const express = require('express')
 const router = express.Router()
 const PessoaModel = require('../models/PessoaModel')
 
+// validadores como Middlewares
+const { validarNovaPessoa } = require('../validators/PessoaValidator')
+const { validarID } = require('../validators/IDValidator')
+
 // Rotas do CRUD
 // Create
-router.post('/pessoas', async (req, res, next) => {
+router.post('/pessoas', validarNovaPessoa, async (req, res, next) => {
   const pessoa = req.body
   const pessoaCadastrada = await PessoaModel.create(pessoa)
   res.status(201).json(pessoaCadastrada)
@@ -16,7 +20,7 @@ router.get('/pessoas', async (req, res, next) => {
   res.json(pessoas)
 })
 
-router.get('/pessoas/:id', async (req, res, next) => {
+router.get('/pessoas/:id', validarID, async (req, res, next) => {
   const id = req.params.id
   const pessoaEncontrata = await PessoaModel.findById(id)
   if (!pessoaEncontrata) {
@@ -26,7 +30,7 @@ router.get('/pessoas/:id', async (req, res, next) => {
 })
 
 // Update
-router.put('/pessoas/:id', async (req, res, next) => {
+router.put('/pessoas/:id', validarID, async (req, res, next) => {
   const id = req.params.id
   const novoDados = req.body
   const pessoaAtualizada = await PessoaModel.findByIdAndUpdate(id, novoDados, { new: true })
@@ -37,7 +41,7 @@ router.put('/pessoas/:id', async (req, res, next) => {
 })
 
 // Delete
-router.delete('/pessoas/:id', async (req, res, next) => {
+router.delete('/pessoas/:id', validarID, async (req, res, next) => {
   const id = req.params.id
   await PessoaModel.findByIdAndDelete(id)
   res.status(204).send()
