@@ -8,7 +8,7 @@ const schemaNovoLivro = yup.object().shape(
         titulo: yup.string().required("O campo titúlo é obrigatório!!"),
         autor: yup.string().required("O campo autor é obrigatório!!"),
         editora: yup.string().required("O campo editora é obrigatório!!"),
-        ano: yup.number().min(1500, "O livro deve ter data de lançamento ápos 1500").max(new Date().getFullYear(), "O ano de lançamento não pode ser no futuro").required("O campo"),
+        ano: yup.number().min(1500, "O livro deve ter data de lançamento ápos 1500").max(new Date().getFullYear(), "O ano de lançamento não pode ser no futuro").required("O campo é obrigatório!"),
         preco: yup.number().required("O campo preço é obrigatório!").positive("O preço deve ser positivo")
     }
 )
